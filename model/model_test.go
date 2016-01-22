@@ -1,25 +1,31 @@
 package model_test
 
+import (
+	"fmt"
+	"sort"
+
+	. "../model"
+)
+
 var s = []*Group{
     {
-      name: "United States",
-      capacity: 250,
-      priority: 2,
+      Name: "United States",
+      Capacity: 250,
+      Priority: 2,
     },
     {
-      name: "Bahamas",
-      capacity; 100,
-      priority: 1,
+      Name: "Bahamas",
+      Capacity: 100,
+      Priority: 1,
     },
     {
-      name: "Japan",
-      capacity: 150,
-      priority: 3,
+      Name: "Japan",
+      Capacity: 150,
+      Priority: 3,
     },
 }
 
-
-func main() {
+func Test() {
 
     sort.Sort(ByCapacity{s})
     fmt.Println("Groups by Capacity:")

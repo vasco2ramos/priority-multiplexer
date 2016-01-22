@@ -1,11 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"sort"
-)
-
-
 type test struct {
     ammount int
     numOffers int
