@@ -1,3 +1,10 @@
+package model
+
+import (
+	"fmt"
+	"sort"
+)
+
 type group struct {
     name            string
     capacity        int
