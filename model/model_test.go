@@ -3,8 +3,10 @@ package model_test
 import (
 	"fmt"
 	"sort"
+	"testing"
+	"bytes"
 
-	. "../model"
+	. "priority-multiplexer/model"
 )
 
 var s = []*Group{
@@ -25,24 +27,36 @@ var s = []*Group{
     },
 }
 
-func Test() {
+func Test(t *testing.T) {
 
     sort.Sort(ByCapacity{s})
-    fmt.Println("Groups by Capacity:")
-    printGroups(s)
+		var result = printGroups(s)
+		if result != "Bahamas-100-1Japan-150-3United States-250-2" {
+			t.Error("Bad Capacity Sorting")
+		}
 
-    sort.Sort(ByName{s})
-    fmt.Println("Organs by Name:")
-    printGroups(s)
+		sort.Sort(ByName{s})
+		result = printGroups(s)
+		if result != "Bahamas-100-1Japan-150-3United States-250-2" {
+			t.Error("Bad Name Sorting")
+		}
 
-    sort.Sort(ByPriority{s})
-    fmt.Println("Organs by Name:")
-    printGroups(s)
+
+		sort.Sort(ByPriority{s})
+		result = printGroups(s)
+		if result != "Bahamas-100-1United States-250-2Japan-150-3" {
+			t.Error("Bad Priority Sorting")
+		}
+
 }
 
 
-func printGroups(s []*Group) {
+func printGroups(s []*Group) string{
+	buffer := bytes.NewBufferString("");
+
 	for _, o := range s {
-		fmt.Printf("%-8s (%d) Priority - (%d)\n", o.Name, o.Capacity, o.Priority)
+		fmt.Fprint(buffer, o.Name,"-", o.Capacity,"-", o.Priority)
 	}
+
+	return buffer.String()
 }

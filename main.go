@@ -1,48 +1,37 @@
 package main
 
-type test struct {
-    ammount int
-    numOffers int
-    prio []int
-    expected int
-}
+import (
+	"sort"
+	"math"
 
-var tests = []test{
-    {
-        ammount: 100,
-        numOffers: 1,
-        prio: []int{1},
-        expected: 100,
-    },
-    {
-        ammount: 200,
-        numOffers: 1,
-        prio: []int{1},
-        expected: 200,
-    },
-    {
-        ammount: 300,
-        numOffers: 1,
-        prio: []int{1},
-        expected: 300,
-    },
+	. "priority-multiplexer/model"
+)
 
-}
-func main(){
-    testAll()
-}
+func alocateByCapacity(resources int, groups []*Group) []int{
 
-func testAll() {
-    for i, t := range tests {
-        output := f(t.ammount, nil, nil)
-        if output != t.expected{
-            fmt.Printf("%d) Boom\n", i+1)
-        }
+		sort.Sort(ByCapacity{groups})
+
+		n := len(groups)
+    optimal := resources/n
+
+		result := []int{}
+
+    for i, g := range groups {
+			if g.Capacity >= optimal {
+					resources -= optimal
+					Append(result,optimal)
+			} else{
+					resources -=  g.Capacity;
+					Append(result, g.Capacity);
+			}
+			n--
+			optimal = math.Floor(resources/n);
     }
 }
 
 
-func f(resources, capacity []int, priority []int) int{
+/*
+func alocateByPriority(resources int, Groups []*Group) []int{
     numGroups := len(capacity)
     fairValue := resources/numGroups // Everyone gets the same ammount
     // Find real capacity of each group
@@ -50,4 +39,4 @@ func f(resources, capacity []int, priority []int) int{
 
     }
     // Alocate Resources Between Groups
-}
+} */
