@@ -2,41 +2,74 @@ package main
 
 import (
 	"sort"
-	"math"
+	"fmt"
 
 	. "priority-multiplexer/model"
 )
 
-func alocateByCapacity(resources int, groups []*Group) []int{
+func alocateByCapacity(resources int, gs Groups) []int{
 
-		sort.Sort(ByCapacity{groups})
+		sort.Sort(ByCapacity{gs})
 
-		n := len(groups)
+		n := len(gs)
     optimal := resources/n
 
 		result := []int{}
 
-    for i, g := range groups {
+    for _, g := range gs {
 			if g.Capacity >= optimal {
 					resources -= optimal
-					Append(result,optimal)
+					result = append(result,optimal)
 			} else{
-					resources -=  g.Capacity;
-					Append(result, g.Capacity);
+					resources -=  g.Capacity
+					result = append(result, g.Capacity)
 			}
 			n--
-			optimal = math.Floor(resources/n);
+			// HACK: THIS SHOULD BE IN THE FOR CYCLE
+			if n != 0 {
+				optimal = resources/n
+			}
     }
+		return result
 }
 
 
-/*
-func alocateByPriority(resources int, Groups []*Group) []int{
-    numGroups := len(capacity)
-    fairValue := resources/numGroups // Everyone gets the same ammount
-    // Find real capacity of each group
-    for i, c := range capacity {
+func alocateByPriority(resources int, gs Groups) []int{
+	sort.Sort(ByPriority{gs})
 
-    }
-    // Alocate Resources Between Groups
-} */
+	//var n int = len(gs)
+
+	result := []int{}
+
+
+	for resources > 0 {
+
+
+
+		//optimal := resources/n
+	}
+	return result
+}
+
+
+func main() {
+	var s = []*Group{
+	    {
+	      Name: "United States",
+	      Capacity: 250,
+	      Priority: 2,
+	    },
+	    {
+	      Name: "Bahamas",
+	      Capacity: 100,
+	      Priority: 1,
+	    },
+	    {
+	      Name: "Japan",
+	      Capacity: 150,
+	      Priority: 3,
+	    },
+	}
+	fmt.Println(alocateByCapacity(50, s))
+
+}

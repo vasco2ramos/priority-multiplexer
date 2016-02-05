@@ -15,16 +15,28 @@ func (s Groups) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
 // Swap methods of the embedded Organs value.
 type ByName struct{ Groups }
 
-func (s ByName) Less(i, j int) bool { return s.Groups[i].Name < s.Groups[j].Name }
+func (s ByName) Less(i, j int) bool {
+  return s.Groups[i].Name < s.Groups[j].Name
+}
 
-// ByCapacity implements sort.Interface by providing Less and using the Len and
-// Swap methods of the embedded Organs value.
+// ByCapacity implements sort.Interface by providing Less and using the Len and.
 type ByCapacity struct{ Groups }
 
-func (s ByCapacity) Less(i, j int) bool { return s.Groups[i].Capacity < s.Groups[j].Capacity }
+func (s ByCapacity) Less(i, j int) bool {
+  return s.Groups[i].Capacity < s.Groups[j].Capacity
+}
 
 // ByPriority implements sort.Interface by providing Less and using the Len and
-// Swap methods of the embedded Organs value.
 type ByPriority struct{ Groups }
 
-func (s ByPriority) Less(i, j int) bool { return s.Groups[i].Priority < s.Groups[j].Priority }
+func (s ByPriority) Less(i, j int) bool {
+  return s.Groups[i].Priority < s.Groups[j].Priority
+}
+
+func (s Groups) TotalPriority() int {
+  i := 0
+  for _, g := range s {
+    i += g.Priority
+  }
+  return i
+}
