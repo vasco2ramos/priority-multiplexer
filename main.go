@@ -44,28 +44,29 @@ func allocateByPriority(resources int, gs Groups) []int{
 
 	sort.Sort(ByPriority{gsc})
 
-	//n := len(gsc)
-	//tp := gs.TotalPriority()
+	tp := gs.TotalPriority()
 
 	result := []int{}
 
 	for {
-		// Give resources to highest priority group
-		//p := gsc[0].Priority
-		//c := gsc[0].Capacity
+		if resources == 0 { break }
+		// Get highest priority group
+		x, gsc := gsc[len(gsc)-1], gsc[:len(gsc)-1]
 
-		// Decrease group capacity
+		if x == nil { break }
+		// Get ammount of resources it should receive
+		optimal := (x.Priority/tp) * resources
 
+		// HACK: Decrease group capacity
+		resources -= optimal
+		x.Capacity -= optimal
 
-		// If group still has capacity
-		/*
-		if c > 0{
-			// Put it at the end of the list
+		if x.Capacity < 0{
+			resources += -1*(x.Capacity)
 		} else { // group still is out of capacity
-			// Remove it from the list
+			gsc = append(gsc,x)
 		}
-*/
-		// return division of Resources
+
 	}
 	return result
 }
@@ -89,6 +90,6 @@ func main() {
 	      Priority: 3,
 	    },
 	}
-	fmt.Println(allocateByCapacity(50, s))
+	fmt.Println(allocateByPriority(50, s))
 
 }
