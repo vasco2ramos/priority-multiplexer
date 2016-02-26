@@ -7,46 +7,65 @@ import (
 	. "priority-multiplexer/model"
 )
 
-func alocateByCapacity(resources int, gs Groups) []int{
+func allocateByCapacity(resources int, gs Groups) []int{
 
-		sort.Sort(ByCapacity{gs})
+	gsc := make(Groups, len(gs))
+	copy(gsc, gs)
 
-		n := len(gs)
-    optimal := resources/n
+	sort.Sort(ByCapacity{gsc})
 
-		result := []int{}
-
-    for _, g := range gs {
-			if g.Capacity >= optimal {
-					resources -= optimal
-					result = append(result,optimal)
-			} else{
-					resources -=  g.Capacity
-					result = append(result, g.Capacity)
-			}
-			n--
-			// HACK: THIS SHOULD BE IN THE FOR CYCLE
-			if n != 0 {
-				optimal = resources/n
-			}
-    }
-		return result
-}
-
-
-func alocateByPriority(resources int, gs Groups) []int{
-	sort.Sort(ByPriority{gs})
-
-	//var n int = len(gs)
+	n := len(gsc)
+  optimal := resources/n
 
 	result := []int{}
 
+  for _, g := range gsc {
+		if g.Capacity >= optimal {
+				resources -= optimal
+				result = append(result,optimal)
+		} else{
+				resources -=  g.Capacity
+				result = append(result, g.Capacity)
+		}
+		n--
+		// HACK: THIS SHOULD BE IN THE FOR CYCLE
+		if n != 0 {
+			optimal = resources/n
+		}
+  }
+	return result
+}
 
-	for resources > 0 {
+
+func allocateByPriority(resources int, gs Groups) []int{
+
+	gsc := make(Groups, len(gs))
+	copy(gsc, gs)
+
+	sort.Sort(ByPriority{gsc})
+
+	//n := len(gsc)
+	//tp := gs.TotalPriority()
+
+	result := []int{}
+
+	for {
+		// Give resources to highest priority group
+		//p := gsc[0].Priority
+		//c := gsc[0].Capacity
+
+		// Decrease group capacity
 
 
-
-		//optimal := resources/n
+		// If group still has capacity
+		/*
+		if c > 0{
+			// Put it at the end of the list
+		} else { // group still is out of capacity
+			// Remove it from the list
+		}
+*/
+		// return division of Resources
 	}
 	return result
 }
@@ -70,6 +89,6 @@ func main() {
 	      Priority: 3,
 	    },
 	}
-	fmt.Println(alocateByCapacity(50, s))
+	fmt.Println(allocateByCapacity(50, s))
 
 }
