@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"sort"
+
+	. "priority-multiplexer/model"
 )
 
 func allocateByCapacity(resources int, gs Groups) []int {
@@ -33,41 +35,49 @@ func allocateByCapacity(resources int, gs Groups) []int {
 	return result
 }
 
-func allocateByPriority(resources int, gs Groups) []int {
+func allocateByPriority(resources int, gs Groups) Groups {
 
 	gsc := make(Groups, len(gs))
 	copy(gsc, gs)
-	sort.Sort(ByPriority{gsc})
+	//sort.Sort(ByPriority{gsc})
 
 	tp := gs.TotalPriority()
 
-	result := []int{}
+	result := Groups{}
 
 	for {
+		gsc.Print()
 		if len(gsc) == 0 || resources == 0 {
+			for _, g := range gsc {
+				result = append(result, g)
+			}
 			break
 		}
 		x, gsc := gsc[len(gsc)-1], gsc[:len(gsc)-1]
 
-		optimal := (x.Priority / tp) * resources
-		resources -= optimal
-		x.Capacity -= optimal
+		optimal := int(float64(x.Priority) / float64(tp) * float64(resources))
 
 		if x.Capacity <= optimal {
-			resources -= x.Capacity
-			// calculate result later
+			print("here1\n")
+			resources = resources - x.Capacity
+			x.ResourcesAlocated = x.ResourcesAlocated + x.Capacity
+			result = append(result, x)
 		} else {
-			x.Capacity -= optimal
+			print("here2\n")
+			fmt.Println(resources)
+			x.Capacity = x.Capacity - optimal
+			x.ResourcesAlocated = x.ResourcesAlocated + x.Capacity
+			resources -= optimal
 			gsc = append(gsc, x)
-			// calculate result later
+			resources -= optimal
 		}
-
 	}
+
 	return result
 }
 
 func main() {
-	var s = []*Group{
+	var s = Groups{
 		{
 			Name:     "United States",
 			Capacity: 250,
@@ -84,6 +94,7 @@ func main() {
 			Priority: 3,
 		},
 	}
-	fmt.Println(allocateByPriority(50, s))
+	s.Print()
+	allocateByPriority(50, s).Print()
 
 }

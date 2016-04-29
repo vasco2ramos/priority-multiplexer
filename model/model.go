@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 // Group represents a sample of group to receive resources
 type Group struct {
 	Name              string
@@ -49,4 +51,11 @@ func (s Groups) TotalPriority() int {
 		i += g.Priority
 	}
 	return i
+}
+
+//TotalPriority gets groups Priority
+func (s Groups) Print() {
+	for _, g := range s {
+		fmt.Printf("%s gets %d\n", g.Name, g.ResourcesAlocated)
+	}
 }
