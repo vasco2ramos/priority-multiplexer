@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 
 	. "priority-multiplexer/model"
@@ -39,37 +38,35 @@ func allocateByPriority(resources int, gs Groups) Groups {
 
 	gsc := make(Groups, len(gs))
 	copy(gsc, gs)
-	//sort.Sort(ByPriority{gsc})
+	sort.Sort(ByPriority{gsc})
 
 	tp := gs.TotalPriority()
 
 	result := Groups{}
-
+	gsc.Print()
 	for {
-		gsc.Print()
 		if len(gsc) == 0 || resources == 0 {
 			for _, g := range gsc {
 				result = append(result, g)
 			}
 			break
 		}
-		x, gsc := gsc[len(gsc)-1], gsc[:len(gsc)-1]
-
+		x := gsc[0]
+		gsc = gsc[1:len(gsc)]
 		optimal := int(float64(x.Priority) / float64(tp) * float64(resources))
 
 		if x.Capacity <= optimal {
-			print("here1\n")
 			resources = resources - x.Capacity
 			x.ResourcesAlocated = x.ResourcesAlocated + x.Capacity
 			result = append(result, x)
 		} else {
-			print("here2\n")
-			fmt.Println(resources)
+			if optimal == 0 {
+				optimal = resources
+			}
 			x.Capacity = x.Capacity - optimal
-			x.ResourcesAlocated = x.ResourcesAlocated + x.Capacity
+			x.ResourcesAlocated = x.ResourcesAlocated + optimal
 			resources -= optimal
 			gsc = append(gsc, x)
-			resources -= optimal
 		}
 	}
 
@@ -94,7 +91,6 @@ func main() {
 			Priority: 3,
 		},
 	}
-	s.Print()
-	allocateByPriority(50, s).Print()
+	allocateByPriority(100, s).Print()
 
 }

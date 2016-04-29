@@ -41,7 +41,7 @@ type ByPriority struct{ Groups }
 
 //Less provides the sort.Interface methods
 func (s ByPriority) Less(i, j int) bool {
-	return s.Groups[i].Priority < s.Groups[j].Priority
+	return s.Groups[i].Priority > s.Groups[j].Priority
 }
 
 //TotalPriority gets groups Priority
