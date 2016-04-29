@@ -1,9 +1,6 @@
 package model_test
 
 import (
-	"bytes"
-	"fmt"
-	"sort"
 	"testing"
 
 	. "priority-multiplexer/model"
@@ -27,6 +24,7 @@ var s = Groups{
 	},
 }
 
+/*
 func TestByCapacity(t *testing.T) {
 	sort.Sort(ByCapacity{s})
 	var result = printGroups(s)
@@ -49,21 +47,11 @@ func TestByPriority(t *testing.T) {
 	if result != "Bahamas-100-1United States-250-2Japan-150-3" {
 		t.Error("Bad Priority Sorting")
 	}
-}
+}*/
 
 func TestTotalPriority(t *testing.T) {
 	var result = s.TotalPriority()
 	if result != 6 {
 		t.Error("Wrong Priority")
 	}
-}
-
-func printGroups(s []*Group) string {
-	buffer := bytes.NewBufferString("")
-
-	for _, o := range s {
-		fmt.Fprint(buffer, o.Name, "-", o.Capacity, "-", o.Priority)
-	}
-
-	return buffer.String()
 }
