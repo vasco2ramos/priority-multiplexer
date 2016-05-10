@@ -1,4 +1,4 @@
-package main
+package prioritymultiplexer
 
 import (
 	"sort"
@@ -6,7 +6,7 @@ import (
 	. "priority-multiplexer/model"
 )
 
-func allocateByCapacity(resources int, gs Groups) []int {
+func allocateByCapacity(resources int, gs Groups) Groups {
 
 	gsc := make(Groups, len(gs))
 	copy(gsc, gs)
@@ -15,15 +15,16 @@ func allocateByCapacity(resources int, gs Groups) []int {
 	n := len(gsc)
 	optimal := resources / n
 
-	result := []int{}
+	result := Groups{}
 
 	for _, g := range gsc {
 		if g.Capacity >= optimal {
 			resources -= optimal
-			result = append(result, optimal)
+			g.ResourcesAlocated = optimal
+			result = append(result, g)
 		} else {
 			resources -= g.Capacity
-			result = append(result, g.Capacity)
+			result = append(result, g)
 		}
 		n--
 		// HACK: THIS SHOULD BE IN THE FOR CYCLE
@@ -43,7 +44,7 @@ func allocateByPriority(resources int, gs Groups) Groups {
 	tp := gs.TotalPriority()
 
 	result := Groups{}
-	gsc.Print()
+
 	for {
 		if len(gsc) == 0 || resources == 0 {
 			for _, g := range gsc {
@@ -91,6 +92,5 @@ func main() {
 			Priority: 3,
 		},
 	}
-	allocateByPriority(100, s).Print()
-
+	allocateByCapacity(100, s).Print()
 }
